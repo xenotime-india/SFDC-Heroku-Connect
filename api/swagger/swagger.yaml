@@ -1,0 +1,229 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SFDC-Heroku Connect
+# during dev, should point to your local machine
+host: localhost:8080
+# basePath prefixes all resource paths 
+basePath: /api
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /user/profile:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    get:
+      description: Returns the consolidated profile of a given user
+      # used as the method name of the controller
+      operationId: profile
+      parameters:
+      - name: Authorization
+        in: header
+        description: A valid JWT for a logged in user
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/UserProfile"
+        # responses may fall through to errors
+        '403': 
+          description: 'You do not have necessary permissions for the resource'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /account/fetch:
+    x-swagger-router-controller: account
+    post:
+      description: get all accounts
+      operationId: getAccounts
+      parameters:
+      - name: body
+        in: body
+        description: parameters required for pagination
+        required: false
+        schema:
+          $ref: "#/definitions/ListAccountParam"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SeccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  /account/upsert:
+    x-swagger-router-controller: account
+    post:
+      description: upsert account record
+      operationId: upsertAccount
+      parameters:
+      - name: body
+        in: body
+        description: parameters required
+        required: false
+        schema:
+          $ref: "#/definitions/AccountParam"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SeccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /account/delete:
+    x-swagger-router-controller: account
+    delete:
+      description: delete account record
+      operationId: deleteAccount
+      parameters:
+      - in: query
+        name: sfid
+        description: account id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SeccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contact/fetch:
+    x-swagger-router-controller: contact
+    post:
+      description: get all contacts
+      operationId: getContacts
+      parameters:
+      - name: Authorization
+        in: header
+        description: A valid JWT for a logged in user
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: parameters required for pagination
+        required: false
+        schema:
+          $ref: "#/definitions/ListAccountParam"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SeccessResponse"
+        '403': 
+          description: 'You do not have necessary permissions for the resource'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contact/delete:
+    x-swagger-router-controller: contact
+    delete:
+      description: delete contact record
+      operationId: deleteContact
+      parameters:
+      - in: query
+        name: id
+        description: contact id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SeccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  Filter:
+    properties:
+      id:
+        type: string
+      value:
+        type: string
+        
+  Filtered:
+    type: array
+    items:
+      $ref: "#/definitions/Filter"
+  
+  SortBy:
+    properties:
+      id:
+        type: string
+      desc:
+        type: boolean
+        
+  ListAccountParam:
+    properties:
+      perPage:
+        type: number
+      page:
+        type: number
+      sortby:
+        $ref: "#/definitions/SortBy"
+      filtered:
+        $ref: "#/definitions/Filtered"
+        
+  AccountParam:
+    required:
+      - name
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      webSite:
+        type: string
+      description:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+        
+  UserProfile:
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+        
+  SeccessResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

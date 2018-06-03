@@ -1,0 +1,1 @@
+docker exec -i -t t-mobile-store-scheduling-poc /bin/bash

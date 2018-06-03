@@ -1,0 +1,39 @@
+version: '3'
+services:
+  app_postgres:
+    container_name: t_mobile_store_scheduling_poc_postgres
+    image: "mdillon/postgis"
+    ports:
+      - 64000:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=t_mobile_store_scheduling_poc
+  app:
+    container_name: t_mobile_store_scheduling_poc
+    build: .
+    volumes:
+      - ./.env:/app/.env
+      - ./index.js:/app/index.js
+      - ./package.json:/app/package.json
+      - ./api:/app/api
+      - ./public:/app/public
+      - ./src:/app/src
+      - ./build:/app/build
+    depends_on:
+      - app_postgres
+    links:
+      - app_postgres
+    ports:
+      - 64002:3000 # React Development Server
+      - 64003:3001 # Web API
+      - 64004:5858 # Debugging port for Web API
+      - 64005:3002 # Swagger Project Editor
+    environment:
+      DATABASE_URL: postgres://postgres:password@app_postgres:5432/t_mobile_store_scheduling_poc
+      POSTGRES_LOGGING: "true" # Logs out every query that Postgres runs through Sequelize
+      RECREATE_SCHEMA: "true" # Nukes the database on every refresh
+      AUTH_SAML_ENABLED: "false"
+      AUTH_SALESFORCE_ENABLED: "false"
+    command: ["node", "docker.js"]
+    restart: always

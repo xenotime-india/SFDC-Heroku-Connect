@@ -1,0 +1,30 @@
+{
+  "collectCoverageFrom": [
+    "api/**/*.{js,jsx,mjs}"
+  ],
+  "coveragePathIgnorePatterns": [
+    "<rootDir>/node_modules/",
+    "<rootDir>/api/services/knex.js",
+    "<rootDir>/api/services/constants.js",
+    "<rootDir>/api/services/redis.js",
+    "<rootDir>/api/config.js",
+    "<rootDir>/api/index.js"
+  ],
+  "testMatch": [
+    "**/api/**/?(*.)(spec|test).{js,jsx,mjs}"
+  ],
+  "testEnvironment": "node",
+  "transformIgnorePatterns": [
+    "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
+  ],
+  "coverageReporters": ["text"],
+  "moduleFileExtensions": [
+    "web.js",
+    "mjs",
+    "js",
+    "json",
+    "web.jsx",
+    "jsx",
+    "node"
+  ]
+}

@@ -1,0 +1,132 @@
+@import url(salesforce-lightning-design-system.css);
+
+.slds-grid {
+  min-width: 800px;
+}
+
+.slds-context-bar__item {
+  max-width: 16rem;
+}
+
+.create-new-job {
+  position: relative;
+  top: 32px;
+}
+
+.create-new-job a {
+  color: white;
+}
+
+.create-new-job a:hover {
+  text-decoration: none;
+}
+
+.submit-archive a {
+  color: white;
+}
+
+.submit-archive a:hover {
+  text-decoration: none;
+}
+
+td.slds-truncate:last-of-type svg {
+  margin: 0 2px 0 0;
+}
+
+.topMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 500;
+}
+
+.not-registered {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: rgba(225, 225, 225, 0.8);
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.listViewPickList {
+  padding: 10px;
+}
+
+.page-header-archive {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: rgba(225, 225, 225, 0.8);
+}
+
+.job-details ul {
+  margin-top: 20px;
+}
+
+.job-details ul li {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.job-details ul li span {
+  display: inline-block;
+}
+
+.archived-dataset .slds-truncate {
+  overflow: inherit;
+}
+
+.slds-picklist__label {
+  width: 8rem;
+}
+
+.hasHover:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.hasHover:hover:before {
+  content: ' ';
+  background-color: black;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  flex: 1;
+  background: rgb(244, 246, 249);
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: rgba(0,0,0, .5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.login-btn:focus {
+  box-shadow: none;
+}

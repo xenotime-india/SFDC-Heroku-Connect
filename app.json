@@ -1,0 +1,35 @@
+{
+  "name": "ads-appointment-manager",
+  "scripts": {
+  },
+  "env": {
+    "AUTH_SALESFORCE_ENABLED": {
+      "required": true
+    },
+    "POSTGRES_LOGGING": {
+      "required": true
+    },
+    "RATE_LIMIT_MINUTES_TILL_RESET": {
+      "required": true
+    },
+    "RATE_LIMIT_REQUESTS_PER_MINUTE": {
+      "required": true
+    },
+    "REDIS_URL": {
+      "required": true
+    },
+    "DATABASE_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
