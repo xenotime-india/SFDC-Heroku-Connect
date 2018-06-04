@@ -29,11 +29,17 @@ export default class Root extends React.Component {
     }
   };
 
+  filtering = false;
+
   alertClose = () => {
     this.setState({
       isSuccessMessage: false,
       isErrorMessage: false
     });
+  };
+
+  onFilteredChange = (column, value) => {
+    this.filtering = true;
   };
 
   onFormSubmitSuccess = async paylod => {
@@ -67,13 +73,22 @@ export default class Root extends React.Component {
     this.setState({ isErrorMessage: true, isSuccessMessage: false, errorMsg });
   };
 
-  fetchAccount = async (state, instance) => {
+  fetchStrategy = async tableState => {
+    if (this.filtering) {
+      return await debounce(this.fetchAccount, 500)(tableState);
+    } else {
+      return await this.fetchAccount(tableState);
+    }
+  };
+
+  fetchAccount = async tableState => {
+    this.filtering = false;
     this.setState({
       dataLoading: true,
       isErrorMessage: false,
       isSuccessMessage: false
     });
-    const { pageSize, page, sorted, filtered } = state;
+    const { pageSize, page, sorted, filtered } = tableState;
     const [sortby] = sorted;
     const url = `${REACT_APP_API_URL.URL}/api/account/fetch`;
     const paylod = {
@@ -220,7 +235,7 @@ export default class Root extends React.Component {
         </div>
         <div className="slds-card__body">
           <DataTable
-            onFetchData={debounce(this.fetchAccount,300)}
+            onFetchData={this.fetchStrategy}
             data={data}
             pages={pages}
             columns={[

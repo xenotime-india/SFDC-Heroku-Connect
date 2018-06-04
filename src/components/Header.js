@@ -37,7 +37,7 @@ export default props => {
         </div>
       </div>
       <nav className="slds-context-bar__secondary" role="navigation">
-        <ul className="slds-grid">
+        <ul className="slds-grid top-nav">
           <NavLink className="slds-context-bar__label-action" to="/">
             <span className="slds-truncate" title="Home">
               Heroku Connect
@@ -55,7 +55,7 @@ export default props => {
             </NavLink>
           )}
         </ul>
-        <div>
+        <div className="userInfo">
           {!props.profile.name && (
             <button className="login-btn slds-button" onClick={props.login}>
               Login

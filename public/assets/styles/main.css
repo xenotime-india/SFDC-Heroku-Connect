@@ -130,3 +130,11 @@ body {
 .login-btn:focus {
   box-shadow: none;
 }
+
+.userInfo {
+  margin-left: auto;
+  min-width: 155px;
+}
+.top-nav {
+  min-width: 500px;
+}
