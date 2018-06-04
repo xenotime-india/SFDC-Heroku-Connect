@@ -16,11 +16,11 @@ jest.mock('../services/knex', () => {
     query.response([
       {
         sfid: '00100101101',
-        name: 'account 001',
+        name: 'account 001'
       },
       {
         sfid: '00100101102',
-        name: 'account 001',
+        name: 'account 001'
       }
     ]);
   });
@@ -57,7 +57,9 @@ describe('/controllers/account', () => {
 
     await controller.upsertAccount(req, res, () => {});
 
-    expect(JSON.parse(res._getData()).message).toEqual('Account upsert action complete successfully.');
+    expect(JSON.parse(res._getData()).message).toEqual(
+      'Account upsert action complete successfully.'
+    );
   });
 
   it('should delete account', async () => {
@@ -69,6 +71,8 @@ describe('/controllers/account', () => {
 
     await controller.deleteAccount(req, res, () => {});
 
-    expect(JSON.parse(res._getData()).message).toEqual('Account already deleted.');
+    expect(JSON.parse(res._getData()).message).toEqual(
+      'Account already deleted.'
+    );
   });
 });
