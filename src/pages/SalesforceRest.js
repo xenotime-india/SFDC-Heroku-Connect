@@ -6,6 +6,7 @@ import SuccessMessage from './../components/SuccessMessage';
 import ErrorMessage from './../components/ErrorMessage';
 import { REACT_APP_API_URL } from './../constants';
 import { getToken } from './../services/authentication';
+import { debounce } from 'lodash';
 
 export default class SalesforceRest extends React.Component {
   state = {
@@ -19,6 +20,20 @@ export default class SalesforceRest extends React.Component {
     dataLoading: false
   };
 
+  filtering = false;
+
+  onFilteredChange = (column, value) => {
+    this.filtering = true;
+  };
+
+  fetchStrategy = async tableState => {
+    if (this.filtering) {
+      return await debounce(this.fetchContacts, 700)(tableState);
+    } else {
+      return await this.fetchContacts(tableState);
+    }
+  };
+
   alertClose = () => {
     this.setState({
       isSuccessMessage: false,
@@ -26,13 +41,13 @@ export default class SalesforceRest extends React.Component {
     });
   };
 
-  fetchContacts = async (state, instance) => {
+  fetchContacts = async tableState => {
     this.setState({
       dataLoading: true,
       isErrorMessage: false,
       isSuccessMessage: false
     });
-    const { pageSize, page, sorted, filtered } = state;
+    const { pageSize, page, sorted, filtered } = tableState;
     const [sortby] = sorted;
     const paylod = {
       pageSize,
@@ -131,7 +146,8 @@ export default class SalesforceRest extends React.Component {
         </div>
         <div className="slds-card__body">
           <DataTable
-            onFetchData={this.fetchContacts}
+            onFetchData={this.fetchStrategy}
+            onFilteredChange={this.onFilteredChange}
             data={data}
             pages={pages}
             columns={[

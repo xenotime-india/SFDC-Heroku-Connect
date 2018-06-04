@@ -7,6 +7,8 @@ import {
   Button
 } from 'react-lightning-design-system';
 
+import ErrorMessage from './ErrorMessage';
+
 export default class AccountForm extends React.Component {
   state = {
     name: '',
@@ -14,7 +16,9 @@ export default class AccountForm extends React.Component {
     city: '',
     country: '',
     description: '',
-    sfid: null
+    sfid: null,
+    errorMsg: '',
+    isErrorMessage: false
   };
 
   componentDidMount() {
@@ -57,19 +61,34 @@ export default class AccountForm extends React.Component {
     if (errorMsg.length === 0) {
       onFormSubmitSuccess(this.state);
     } else {
-      onFormSubmitFail(errorMsg);
+      this.setState({ isErrorMessage: true, errorMsg });
     }
+  };
+
+  alertClose = () => {
+    this.setState({
+      isErrorMessage: false
+    });
   };
 
   render() {
     const { closeAction } = this.props;
-    const { name, sfid, webSite, city, country } = this.state;
+    const {
+      name,
+      sfid,
+      webSite,
+      city,
+      country,
+      isErrorMessage,
+      errorMsg
+    } = this.state;
     return (
       <Modal opened onHide={closeAction}>
         <ModalHeader
           title={sfid ? 'Update Account' : 'Create New Account'}
           closeButton
         />
+
         <ModalContent className="slds-p-around--small">
           <div className="slds-form slds-form_horizontal">
             <div className="slds-form-element">
@@ -150,6 +169,9 @@ export default class AccountForm extends React.Component {
               </div>
             </div>
           </div>
+          {isErrorMessage && (
+            <ErrorMessage errorMsg={errorMsg} onClose={this.alertClose} />
+          )}
         </ModalContent>
         <ModalFooter>
           <Button type="neutral" label="Cancel" onClick={closeAction} />

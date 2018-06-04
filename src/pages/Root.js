@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from 'react-lightning-design-system';
 import { debounce } from 'lodash';
 
+import Loading from './../components/Loading';
 import AccountForm from './../components/AccountForm';
 import { DataTable } from './../components/DataTable/DataTable';
 import SuccessMessage from './../components/SuccessMessage';
@@ -69,13 +70,9 @@ export default class Root extends React.Component {
       });
   };
 
-  onFormSubmitFail = errorMsg => {
-    this.setState({ isErrorMessage: true, isSuccessMessage: false, errorMsg });
-  };
-
   fetchStrategy = async tableState => {
     if (this.filtering) {
-      return await debounce(this.fetchAccount, 500)(tableState);
+      return await debounce(this.fetchAccount, 700)(tableState);
     } else {
       return await this.fetchAccount(tableState);
     }
@@ -200,6 +197,7 @@ export default class Root extends React.Component {
       isErrorMessage,
       errorMsg,
       account,
+      isLoading,
       pages
     } = this.state;
     return (
@@ -210,6 +208,7 @@ export default class Root extends React.Component {
         {isErrorMessage && (
           <ErrorMessage errorMsg={errorMsg} onClose={this.alertClose} />
         )}
+        {isLoading && <Loading />}
         <div className="slds-card__header slds-grid">
           <header className="slds-media slds-media_center slds-has-flexi-truncate">
             <div className="slds-media__figure">
@@ -302,6 +301,7 @@ export default class Root extends React.Component {
             ]}
             defaultPageSize={10}
             loading={dataLoading}
+            onFilteredChange={this.onFilteredChange}
             manual
             filterable
           />
@@ -312,7 +312,6 @@ export default class Root extends React.Component {
             account={account}
             closeAction={this.closeAction}
             onFormSubmitSuccess={this.onFormSubmitSuccess}
-            onFormSubmitFail={this.onFormSubmitFail}
           />
         )}
       </article>
